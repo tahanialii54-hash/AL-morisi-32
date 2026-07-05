@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<div class="store-container">
+    <div class="marquee-header">
+        <marquee>مرحباً بكم في Mega Tech - عالمك التقني في مكان واحد</marquee>
+    </div>
+
+    <nav class="glass-navbar">
+        <div class="nav-left">
+            <div class="dropdown">
+                <button class="menu-btn">☰ القائمة</button>
+                <div class="dropdown-content">
+                    <a href="#">لابتوبات</a><a href="#">طابعات</a><a href="#">تابلت</a>
+                    <a href="#">كاميرات</a><a href="#">ساعات</a><a href="#">فلاشات</a>
+                    <a href="#">ماوس</a><a href="#">سماعات</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-center">
+            <input type="text" class="search-bar" placeholder="ابحث عن منتجك هنا...">
+        </div>
+
+        <div class="nav-right">
+            <select class="currency-select">
+                <option>SAR</option><option>USD</option><option>YER</option>
+            </select>
+            <div class="user-area" onclick="openLogin()">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="user-img">
+                <span>تسجيل الدخول</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="contact-bar">
+        <span>اتصل بنا: <a href="tel:737232799">737232799</a></span>
+        <span>البريد: <a href="mailto:tahanialii54@gmail.com">tahanialii54@gmail.com</a></span>
+    </div>
+
+    <div class="categories-grid">
+        <div class="card">💻 لابتوبات</div>
+        <div class="card">🖨️ طابعات</div>
+        <div class="card">📱 تابلت</div>
+        <div class="card">📷 كاميرات</div>
+        <div class="card">⌚ ساعات</div>
+        <div class="card">💾 فلاشات</div>
+        <div class="card">🖱️ ماوس</div>
+        <div class="card">🎧 سماعات</div>
+    </div>
+</div>
+
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeLogin()">&times;</span>
+        <h2>تسجيل الدخول</h2>
+        <input type="text" placeholder="اسم المستخدم" class="login-input">
+        <input type="password" placeholder="كلمة المرور" class="login-input">
+        <button class="submit-btn">دخول</button>
+    </div>
+</div>
+
+<style>
+    /* الإعدادات الأساسية */
+    .store-container { background: #1a1a1a; min-height: 100vh; color: white; padding: 20px; font-family: sans-serif; }
+    
+    /* شريط التنقل */
+    .glass-navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; }
+    
+    .nav-left { flex: 1; }
+    .nav-center { flex: 2; display: flex; justify-content: center; }
+    .nav-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
+
+    /* البحث */
+    .search-bar { width: 80%; padding: 10px 20px; border-radius: 50px; border: 1px solid #ff69b4; background: #333; color: white; }
+    
+    /* تسجيل الدخول واليمين */
+    .user-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .user-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #ff69b4; }
+    
+    /* التواصل */
+    .contact-bar { text-align: center; margin: 20px 0; color: #ff69b4; font-weight: bold; }
+    .contact-bar a { color: white; text-decoration: none; margin: 0 10px; }
+
+    /* العناصر الأخرى */
+    .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .card { padding: 30px; background: #2a2a2a; border: 1px solid #ff69b4; border-radius: 20px; text-align: center; }
+    
+    /* نافذة الدخول */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+    .modal-content { background: #333; width: 300px; margin: 10% auto; padding: 20px; border-radius: 15px; text-align: center; border: 2px solid #ff69b4; }
+    .login-input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+</style>
+
+<script>
+    function openLogin() { document.getElementById('loginModal').style.display = 'block'; }
+    function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
+</script>

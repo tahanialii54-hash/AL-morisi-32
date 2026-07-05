@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Tech Store | متجر ميجا تك</title>
+    <style>
+        :root { --primary-pink: #f48fb1; --light-pink: #fce4ec; --dark-gray: #424242; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+
+        .top-marquee { background: var(--primary-pink); color: white; padding: 8px 0; text-align: center; font-weight: bold; font-size: 14px; margin: 0; }
+        
+        /* شريط علوي */
+        .utility-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 99; gap: 15px; }
+        .brand-section { display: flex; align-items: center; gap: 15px; }
+        .toggle-sidebar-btn { background: var(--light-pink); color: #ff4081; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        .toggle-sidebar-btn:hover { background: var(--primary-pink); color: white; }
+        .search-wrapper { flex-grow: 1; text-align: center; }
+        input[type="text"] { width: 60%; padding: 12px 25px; border-radius: 40px; border: 2px solid var(--primary-pink); outline: none; }
+        .controls { display: flex; align-items: center; gap: 20px; }
+        .btn-auth { background: var(--primary-pink); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        
+        /* تخطيط الصفحة مع القائمة الجانبية */
+        .main-container { display: flex; flex: 1; position: relative; }
+        
+        /* القائمة الجانبية المخفية والمتحركة */
+        .sidebar { width: 250px; background: #fff; border-left: 2px solid var(--light-pink); padding: 20px 0; box-shadow: -2px 0 5px rgba(0,0,0,0.05); position: fixed; right: -270px; top: 70px; bottom: 0; z-index: 98; transition: cubic-bezier(0.4, 0, 0.2, 1) 0.4s; }
+        .sidebar.active { right: 0; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu li a { display: block; padding: 15px 25px; color: var(--dark-gray); text-decoration: none; font-weight: 600; cursor: pointer; border-bottom: 1px solid #fdf0f4; transition: 0.3s; }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: var(--light-pink); color: #ff4081; padding-right: 35px; }
+
+        /* غطاء الشاشة عند فتح القائمة */
+        .sidebar-overlay { display: none; position: fixed; top: 70px; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.1); z-index: 97; }
+        .sidebar-overlay.active { display: block; }
+
+        /* منطقة المحتوى المتغيرة */
+        .content-area { flex: 1; padding: 20px 40px; transition: 0.4s; }
+
+        /* تعديل بنية الهيرو وتكبير الصورة */
+        .hero { display: flex; align-items: center; padding: 40px 5%; background: var(--light-pink); gap: 40px; border-radius: 20px; margin-bottom: 30px; }
+        .hero-main-img { width: 60%; max-height: 450px; border-radius: 30px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer; } 
+        .hero-text { width: 40%; color: #000000; }
+        .hero-text h1 { font-size: 42px; color: #000000; margin-bottom: 15px; font-weight: 800; }
+        .hero-text p { font-size: 19px; color: #111111; font-weight: 600; line-height: 1.6; }
+        
+        /* ميزات التوصيل الجديدة */
+        .shipping-info { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .shipping-item { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: bold; color: #000000; }
+        .shipping-item span.icon { background: #ff4081; color: white; padding: 5px 10px; border-radius: 12px; font-size: 14px; }
+
+        /* تعديل الأقسام لتصبح سطر واحد مع دعم التمرير إذا صغرت الشاشة */
+        .products-section { padding: 20px 0; }
+        .products-container { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 15px; scrollbar-width: thin; }
+        .product-card { background: white; padding: 15px 10px; border-radius: 20px; width: 110px; min-width: 110px; border: 2px solid #fce4ec; text-align: center; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+        .product-card img { width: 70px; height: 70px; object-fit: contain; }
+        .product-card h4 { margin: 10px 0 0 0; font-size: 14px; white-space: nowrap; }
+        .product-card:hover { border-color: var(--primary-pink); transform: scale(1.05); }
+
+        #mainView { display: block; }
+        #productView { display: none; }
+        
+        /* ترويسة صفحة المنتجات مع زر العودة */
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--light-pink); padding-bottom: 15px; }
+        .btn-back { background: var(--light-pink); color: #ff4081; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
+        .btn-back:hover { background: #ff4081; color: white; }
+
+        /* تنسيق شبكة المنتجات */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; width: 100%; }
+        .item-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #fce4ec; transition: 0.3s; }
+        .item-card:hover { transform: translateY(-5px); border-color: var(--primary-pink); }
+        .item-card img { width: 100%; height: 160px; object-fit: contain; margin-bottom: 15px; cursor: pointer; }
+        .price { color: #ff4081; font-weight: bold; font-size: 20px; margin: 10px 0; }
+        .btn-buy { background: #ff4081; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        /* نافذة السلة المنبثقة والنوافذ العامة */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 400px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative; }
+        .close-btn { position: absolute; top: 15px; left: 15px; cursor: pointer; font-size: 24px; font-weight: bold; color: var(--dark-gray); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+
+        /* نافذة عرض وتكبير الصور بشكل واضح */
+        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+        .image-lightbox img { max-width: 90%; max-height: 85vh; border-radius: 15px; box-shadow: 0 0 25px rgba(250,250,250,0.2); object-fit: contain; }
+        .lightbox-close { position: absolute; top: 20px; left: 20px; color: white; font-size: 35px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .lightbox-close:hover { color: var(--primary-pink); }
+    </style>
+</head>
+<body>
+
+<!-- شريط متحرك في الاعلى -->
+<marquee class="top-marquee" behavior="scroll" direction="right" scrollamount="6">
+    🔥 أهلاً بك في متجر Mega Tech - نوفر لك أحدث الأجهزة التقنية بأسعار تنافسية! ✨ شحن مجاني للطلبات هذا الأسبوع! 🛍️ تصفح أقسامنا واستمتع بأقوى العروض الحصرية اليوم!
+</marquee>
+
+<div class="utility-bar">
+    <div class="brand-section">
+        <button class="toggle-sidebar-btn" onclick="toggleSidebar()">☰ الأقسام</button>
+        <div style="font-weight: bold; font-size: 20px; color: #ff4081; cursor: pointer;" onclick="showHome()">Mega Tech 🛍️</div>
+    </div>
+    <div class="search-wrapper"><input type="text" id="searchInput" oninput="searchProducts()" placeholder="ابحث عن أحدث التقنيات..."></div>
+    <div class="controls">
+        <span style="cursor: pointer; font-weight: bold;" onclick="showCart()">🛒 السلة (<span id="cartCount">0</span>)</span>
+        <button class="btn-auth" id="loginBtn" onclick="handleAuth()">تسجيل الدخول</button>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebarMenu">
+        <ul class="sidebar-menu">
+            <li><a onclick="showHome(); toggleSidebar();" id="menu-home" class="active">🏠 الصفحة الرئيسية</a></li>
+            <li><a onclick="loadCategory('لوحي'); toggleSidebar();" id="menu-لوحي">📱 الأجهزة اللوحية</a></li>
+            <li><a onclick="loadCategory('لابتوب'); toggleSidebar();" id="menu-لابتوب">💻 اللابتوبات</a></li>
+            <li><a onclick="loadCategory('طابعات'); toggleSidebar();" id="menu-طابعات">🖨️ الطابعات</a></li>
+            <li><a onclick="loadCategory('سماعات'); toggleSidebar();" id="menu-سماعات">🎧 السماعات</a></li>
+            <li><a onclick="loadCategory('كاميرات'); toggleSidebar();" id="menu-كاميرات">📷 الكاميرات</a></li>
+            <li><a onclick="loadCategory('ماوس'); toggleSidebar();" id="menu-ماوس">🖱️ الماوس والاكسسوارات</a></li>
+            <li><a onclick="loadCategory('ساعات'); toggleSidebar();" id="menu-ساعات">⌚ الساعات الذكية</a></li>
+            <li><a onclick="loadCategory('ذاكرة'); toggleSidebar();" id="menu-ذاكرة">💾 وحدات التخزين</a></li>
+        </ul>
+    </aside>
+
+    <main class="content-area">
+        
+        <div id="mainView">
+            <header class="hero">
+                <img src="images/hero.png" alt="Hero" class="hero-main-img" onclick="openLightbox(this.src)">
+                <div class="hero-text">
+                    <h1>Mega Tech</h1>
+                    <p>وجهتك الأولى لكل ما هو جديد في عالم الإلكترونيات المتميزة وبأسعار تنافسية تناسب الجميع.</p>
+                    
+                    <div class="shipping-info">
+                        <div class="shipping-item">
+                            <span class="icon">🚚</span>
+                            <span>التوصيل مجاني لكل المحافظات</span>
+                        </div>
+                        <div class="shipping-item">
+                            <span class="icon">📅</span>
+                            <span>التوصيل خلال اسبوع فقط من الطلب</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <section class="products-section">
+                <h3 style="text-align: center; font-size: 24px; margin-bottom: 25px; color: var(--dark-gray);">تصفح الأقسام الرئيسية</h3>
+                <!-- تم جعل الأقسام الثمانية في سطر واحد منظم هنا -->
+                <div class="products-container">
+                    <div class="product-card" onclick="loadCategory('لوحي')"><img src="images/tablat png.jpg"><h4>لوحي</h4></div>
+                    <div class="product-card" onclick="loadCategory('طابعات')"><img src="images/printer png.jpg"><h4>طابعات</h4></div>
+                    <div class="product-card" onclick="loadCategory('سماعات')"><img src="images/headphone png.jpg"><h4>سماعات</h4></div>
+                    <div class="product-card" onclick="loadCategory('كاميرات')"><img src="images/camer-png (15).jpg"><h4>كاميرات</h4></div>
+                    <div class="product-card" onclick="loadCategory('ماوس')"><img src="images/mouse png.jpg"><h4>ماوس</h4></div>
+                    <div class="product-card" onclick="loadCategory('ساعات')"><img src="images/watch png.jpg"><h4>ساعات</h4></div>
+                    <div class="product-card" onclick="loadCategory('لابتوب')"><img src="images/laptop png.jpg"><h4>لابتوب</h4></div>
+                    <div class="product-card" onclick="loadCategory('ذاكرة')"><img src="images/flash png.jpg"><h4>ذاكرة</h4></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- واجهة عرض المنتجات مع زر العودة المضاف حديثاً -->
+        <div id="productView">
+            <div class="view-header">
+                <h2 id="catName" style="margin: 0; color: var(--dark-gray);"></h2>
+                <button class="btn-back" onclick="showHome()">↩️ عودة للرئيسية</button>
+            </div>
+            <div id="gridItems" class="products-grid"></div>
+        </div>
+        
+    </main>
+</div>
+
+<!-- نافذة السلة المنبثقة -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeCart()">×</span>
+        <h3 style="color: #ff4081; margin-top: 0;">🛒 سلة المشتريات الخاصة بك</h3>
+        <div id="cartItemsList" style="margin: 20px 0; text-align: right;"></div>
+        <div style="font-weight: bold; font-size: 18px; margin: 20px 0;" id="cartTotal">الإجمالي: 0$</div>
+        <button class="btn-buy" onclick="checkout()">إتمام الطلب والشراء ✨</button>
+    </div>
+</div>
+
+<!-- النافذة المنبثقة المضافة لتكبير الصور بشكل واضح -->
+<div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <img id="lightboxImg" src="" alt="صورة مكبرة">
+</div>
+
+<script>
+    let isLoggedIn = false;
+    let username = "";
+    let cart = [];
+
+    const storeProducts = {
+        "لابتوب": [
+            { name: "HP Spectre Gold", desc: "تصميم فاخر باللون الأسود والذهبي.", price: 1450, img: "images/laptop png (39).jpg" },
+            { name: "HP Rose Gold", desc: "لابتوب أنيق بأداء عملي يومي.", price: 680, img: "images/laptop png (41).jpg" },
+            { name: "HP Pavilion Pink", desc: "لون وردي عصري وأداء ممتاز.", price: 720, img: "images/laptop png (44).jpg" },
+            { name: "Silver Slim Series", desc: "مجموعة أعمال احترافية بهيكل متين.", price: 1100, img: "images/laptop png (45).jpg" },
+            { name: "Apple Silver", desc: "تصميم أبل النحيف والأنيق.", price: 1200, img: "images/laptop png (46).jpg" },
+            { name: "Apple Pink", desc: "تجربة فريدة باللون الوردي.", price: 1250, img: "images/laptop png (47).jpg" },
+            { name: "Apple Space", desc: "أداء قوي بجودة أبل المعهودة.", price: 1350, img: "images/laptop png (48).jpg" },
+            { name: "HP Rose Edition", desc: "أناقة يومية للمستخدم العصري.", price: 690, img: "images/laptop png (49).jpg" },
+            { name: "HP White Office", desc: "مثالي للعمل المكتبي والدراسة.", price: 580, img: "images/laptop png (50).jpg" },
+            { name: "Lenovo Pro", desc: "اعتمادية عالية وتصميم متين.", price: 750, img: "images/laptop png (51).jpg" },
+            { name: "Dell Business", desc: "جهاز ديل أسود احترافي متين.", price: 550, img: "images/laptop png (52).jpg" },
+            { name: "Dell Silver", desc: "لابتوب ديل فضي كلاسيكي أنيق.", price: 850, img: "images/laptop png (53).jpg" },
+            { name: "Lenovo Legion", desc: "وحش الألعاب بأداء جبار.", price: 1350, img: "images/laptop png (54).jpg" },
+            { name: "Dell Touch", desc: "جهاز ديل يتحول لتابلت بلمسة.", price: 950, img: "images/laptop png (55).jpg" }
+        ],
+        "كاميرات": [
+            { name: "Canon EOS R5", desc: "كاميرا احترافية بدقة تصوير خارقة.", price: 3899, img: "images/camera1.jpg" },
+            { name: "Sony Alpha 7 IV", desc: "الخيار الأفضل لصناع المحتوى والفيديو.", price: 2499, img: "images/camera2.jpg" },
+            { name: "Nikon Z6 II", desc: "أداء متميز في الإضاءة المنخفضة.", price: 1999, img: "images/camera3.jpg" },
+            { name: "Fujifilm X-T4", desc: "ألوان سينمائية رائعة بتصميم كلاسيكي.", price: 1699, img: "images/camera4.jpg" },
+            { name: "Panasonic Lumix GH6", desc: "ملكة تصوير الفيديو بدون اهتزاز.", price: 2199, img: "images/camera5.jpg" },
+            { name: "Canon EOS R6", desc: "تركيز تلقائي سريع ومثالية للرياضة.", price: 2299, img: "images/camera6.jpg" },
+            { name: "Sony ZV-E10", desc: "كاميرا مدمجة ممتازة لمدونات الفيديو.", price: 698, img: "images/camera7.jpg" },
+            { name: "GoPro HERO 12", desc: "كاميرا الأكشن والمغامرات المقاومة للماء.", price: 399, img: "images/camera8.jpg" },
+            { name: "DJI Osmo Pocket 3", desc: "كاميرا جيب ذكية مع مانع اهتزاز ميكانيكي.", price: 519, img: "images/camera9.jpg" },
+            { name: "Nikon D850", desc: "العملاقة الكلاسيكية لعشاق الـ DSLR.", price: 2799, img: "images/camera10.jpg" },
+            { name: "Fujifilm GFX 100S", desc: "دقة خارقة عبر مستشعر الميديم فورمات.", price: 5999, img: "images/camera11.jpg" },
+            { name: "Sony Alpha 6400", desc: "كاميرا خفيفة وسريعة للمبتدئين والمحترفين.", price: 899, img: "images/camera12.jpg" },
+            { name: "Canon PowerShot G7 X", desc: "كاميرا جيب بجودة صور مذهلة.", price: 749, img: "images/camera13.jpg" },
+            { name: "Insta360 X3", desc: "تصوير بزاوية 360 درجة لإبداع بلا حدود.", price: 449, img: "images/camera14.jpg" }
+        ],
+        "طابعات": [
+            { name: "HP LaserJet Pro 4001ne", desc: "طابعة ليزر ذكية سريعة للمكاتب.", price: 249, img: "images/printer1.jpg" },
+            { name: "Canon PIXMA G6020", desc: "طابعة خزان حبر موفرة للمستندات والصور.", price: 299, img: "images/printer2.jpg" },
+            { name: "Epson EcoTank ET-2850", desc: "طابعة بدون خراطيش حبر سهلة التعبئة.", price: 279, img: "images/printer3.jpg" },
+            { name: "Brother HL-L2350DW", desc: "طابعة ليزر أبيض وأسود اقتصادية للغاية.", price: 119, img: "images/printer4.jpg" },
+            { name: "HP OfficeJet Pro 9015e", desc: "طابعة ملونة متكاملة (4 في 1) ذكية.", price: 289, img: "images/printer5.jpg" },
+            { name: "Canon imageCLASS MF452dw", desc: "طابعة ليزر متعددة المهام للمكاتب الكبيرة.", price: 349, img: "images/printer6.jpg" },
+            { name: "Epson SureColor P700", desc: "طابعة صور احترافية للمصممين والمعارض.", price: 799, img: "images/printer7.jpg" },
+            { name: "Xerox VersaLink B400", desc: "إنتاجية عالية وأمان متقدم للشركات.", price: 549, img: "images/printer8.jpg" },
+            { name: "Fujifilm Instax Share SP-3", desc: "طابعة جيب فورية لطباعة صور الهاتف الذكي.", price: 199, img: "images/printer9.jpg" },
+            { name: "HP Tango X", desc: "طابعة منزلية أنيقة بتصميم قماشي عصري.", price: 149, img: "images/printer10.jpg" },
+            { name: "Dymo LabelWriter 550", desc: "طابعة ملصقات سريعة ومثالية للمتاجر.", price: 99, img: "images/printer11.jpg" },
+            { name: "Phomemo M02", desc: "طابعة حرارية صغيرة بدون حبر للملاحظات.", price: 49, img: "images/printer12.jpg" },
+            { name: "Canon SELPHY CP1500", desc: "طباعة صور فوتوغرافية فورية بجودة المعامل.", price: 139, img: "images/printer13.jpg" },
+            { name: "Epson WorkForce WF-110", desc: "طابعة محمولة مدمجة ببطارية مدمجة للمسافرين.", price: 299, img: "images/printer14.jpg" }
+        ],
+        "سماعات": [
+            { name: "Sony WH-1000XM5", desc: "رائدة عزل الضوضاء وصوت عالي النقاء.", price: 398, img: "images/headphone1.jpg" },
+            { name: "Apple AirPods Max", desc: "تصميم فخم وتجربة صوت سينمائية محيطية.", price: 549, img: "images/headphone2.jpg" },
+            { name: "Bose QuietComfort Ultra", desc: "راحة لا مثيل لها مع صوت غامر فائق النقاء.", price: 429, img: "images/headphone3.jpg" },
+            { name: "HyperX Cloud Alpha", desc: "سماعة الألعاب الأفضل بعمر بطارية أسطوري.", price: 199, img: "images/headphone4.jpg" },
+            { name: "Sennheiser HD 660S2", desc: "سماعة احترافية مفتوحة الظهر لعشاق الصوتيات.", price: 599, img: "images/headphone5.jpg" },
+            { name: "JBL Tune 760NC", desc: "صوت بيس قوي وعزل ضوضاء بسعر اقتصادي.", price: 129, img: "images/headphone6.jpg" },
+            { name: "Audio-Technica ATH-M50x", desc: "سماعة الاستوديو الشهيرة للمخرجين والموزعين.", price: 149, img: "images/headphone7.jpg" },
+            { name: "Anker Soundcore Space Q45", desc: "بطارية خارقة تدوم 50 ساعة مع عزل ممتاز.", price: 149, img: "images/headphone8.jpg" },
+            { name: "Razer BlackShark V2 Pro", desc: "سماعة رياضية إلكترونية لاسلكية وميكروفون نقي.", price: 179, img: "images/headphone9.jpg" },
+            { name: "Logitech G Pro X 2", desc: "سماعة ألعاب بمحركات غرافين ثورية.", price: 249, img: "images/headphone10.jpg" },
+            { name: "Marshall Monitor II A.N.C.", desc: "تصميم روك كلاسيكي وعزل ضوضاء نشط.", price: 319, img: "images/headphone11.jpg" },
+            { name: "SteelSeries Arctis Nova 7", desc: "صوت محيطي ممتاز وتوافق كامل مع المنصات.", price: 179, img: "images/headphone12.jpg" },
+            { name: "Beats Studio Pro", desc: "تكامل ممتاز مع هواتف آيفون وأندرويد وبيس قوي.", price: 349, img: "images/headphone13.jpg" },
+            { name: "Beyerdynamic DT 990 Pro", desc: "الخيار الأول لصناع المحتوى ومصممي الصوت.", price: 159, img: "images/headphone14.jpg" }
+        ],
+        "ساعات": [
+            { name: "Apple Watch Ultra 2", desc: "شاشة فائقة السطوع وهيكل تيتانيوم صلب.", price: 799, img: "images/watch1.jpg" },
+            { name: "Samsung Galaxy Watch 6 Pro", desc: "أفضل ساعة ذكية لنظام أندرويد مع حساسات متقدمة.", price: 399, img: "images/watch2.jpg" },
+            { name: "Garmin Fenix 7 Pro", desc: "ساعة رياضية احترافية مدعومة بالشحن الشمسي.", price: 799, img: "images/watch3.jpg" },
+            { name: "Huawei Watch GT 4", desc: "تصميم كلاسيكي فاخر وبطارية تدوم أسبوعين.", price: 249, img: "images/watch4.jpg" },
+            { name: "Fitbit Charge 6", desc: "سوار ذكي متقدم لتتبع اللياقة والنوم.", price: 159, img: "images/watch5.jpg" },
+            { name: "Amazfit GTR 4", desc: "نظام تحديد مواقع دقيق وشاشة أموليد ممتازة.", price: 199, img: "images/watch6.jpg" },
+            { name: "Apple Watch Series 9", desc: "ميزة النقر المزدوج الثورية ومعالج قوي.", price: 399, img: "images/watch7.jpg" },
+            { name: "Pixel Watch 2", desc: "تكامل عميق مع خدمات جوجل وحساسات دقيقة.", price: 349, img: "images/watch8.jpg" },
+            { name: "Xiaomi Watch S3", desc: "إطار قابل للتغيير ونظام تشغيل سلس وسريع.", price: 129, img: "images/watch9.jpg" },
+            { name: "TicWatch Pro 5", desc: "شاشة مزدوجة ذكية وبطارية تدوم طويلاً.", price: 349, img: "images/watch10.jpg" },
+            { name: "Suunto Race", desc: "ساعة رياضية بشاشة أموليد مخصصة للعدائين.", price: 449, img: "images/watch11.jpg" },
+            { name: "Casio G-Shock Smart", desc: "صلابة جي شوك المعهودة مع ميزات ذكية.", price: 299, img: "images/watch12.jpg" },
+            { name: "Withings ScanWatch2", desc: "ساعة هجينة فاخرة مخصصة للمؤشرات الطبية.", price: 349, img: "images/watch13.jpg" },
+            { name: "Polar Vantage V3", desc: "ساعة قياس الأداء الرياضي وتتبع الاستشفاء.", price: 599, img: "images/watch14.jpg" }
+        ],
+        "لوحي": [
+            { name: "iPad Pro M2 12.9", desc: "شاشة شاشات Liquid Retina XDR الخارقة.", price: 1099, img: "images/tab1.jpg" },
+            { name: "Samsung Galaxy Tab S9 Ultra", desc: "شاشة ضخمة 14.6 إنش ومقاومة للماء.", price: 1199, img: "images/tab2.jpg" },
+            { name: "iPad Air 5", desc: "قوة شريحة M1 بألوان متعددة جذابة.", price: 599, img: "images/tab3.jpg" },
+            { name: "Microsoft Surface Pro 9", desc: "تابلت لابتوب متكامل بنظام ويندوز 11.", price: 999, img: "images/tab4.jpg" },
+            { name: "Lenovo Tab P12", desc: "شاشة 3K ممتازة لمشاهدة الأفلاف والدراسة.", price: 349, img: "images/tab5.jpg" },
+            { name: "Xiaomi Pad 6 Pro", desc: "أداء قوي وشاشة 144 هرتز بسعر منافس.", price: 399, img: "images/tab6.jpg" },
+            { name: "iPad Mini 6", desc: "حجم صغير ومدمج مثالي للقراءة والتنقل.", price: 499, img: "images/tab7.jpg" },
+            { name: "Samsung Galaxy Tab A9+", desc: "تابلت عائلي اقتصادي ممتاز للأطفال.", price: 219, img: "images/tab8.jpg" },
+            { name: "Amazon Fire HD 10", desc: "تابلت رخيص جداً مخصص للقراءة والتصفح.", price: 149, img: "images/tab9.jpg" },
+            { name: "OnePlus Pad", desc: "تصميم فريد ونسبة أبعاد شاشة مريحة للعين.", price: 479, img: "images/tab10.jpg" },
+            { name: "Huawei MatePad Pro", desc: "شاشة أوليد رائعة وإبداع بلا حدود بالقلم.", price: 699, img: "images/tab11.jpg" },
+            { name: "Google Pixel Tablet", desc: "يأتي مع قاعدة شحن سبيكر منزلي ذكي.", price: 499, img: "images/tab12.jpg" },
+            { name: "Nokia T21", desc: "هيكل متين من الألمنيوم وبطارية طويلة العمر.", price: 239, img: "images/tab13.jpg" },
+            { name: "HTC A103 Plus", desc: "عودة براند HTC العريق بجهاز لوحي اقتصادي.", price: 179, img: "images/tab14.jpg" }
+        ],
+        "ماوس": [
+            { name: "Logitech MX Master 3S", desc: "الماوس المريح الصامت للمصممين والمبرمجين.", price: 99, img: "images/mouse1.jpg" },
+            { name: "Razer DeathAdder V3 Pro", desc: "ماوس ألعاب خفيف وسريع جداً للمحترفين.", price: 149, img: "images/mouse2.jpg" },
+            { name: "Logitech G Pro X Superlight", desc: "الماوس المفضل لجميع لاعبي الشوتر عالي الدقة.", price: 159, img: "images/mouse3.jpg" },
+            { name: "Apple Magic Mouse 2", desc: "تصميم أنيق يدعم حركات الإيماءات اللمسية.", price: 79, img: "images/mouse4.jpg" },
+            { name: "SteelSeries Rival 3", desc: "أداء ألعاب رائع مع إضاءة RGB اقتصادية.", price: 29, img: "images/mouse5.jpg" },
+            { name: "Corsair Dark Core RGB", desc: "ماوس مريح بمسند جانبي وشحن لاسلكي.", price: 89, img: "images/mouse6.jpg" },
+            { name: "ASUS ROG Spatha X", desc: "ماوس ألعاب عملاق ومثالي لألعاب الـ MMO.", price: 149, img: "images/mouse7.jpg" },
+            { name: "Anker Ergonomic Mouse", desc: "تصميم عمودي صحي لحماية معصم اليد من الآلام.", price: 25, img: "images/mouse8.jpg" },
+            { name: "Glorious Model O", desc: "تصميم خلية النحل خفيف الوزن لعشاق الـ RGB.", price: 49, img: "images/mouse9.jpg" },
+            { name: "Microsoft Modern Mouse", desc: "بسيط وأنيق ومثالي للتنقل واللابتوب.", price: 35, img: "images/mouse10.jpg" },
+            { name: "Keychron M3", desc: "مستشعر احترافي عالي الدقة وتوافق تام.", price: 49, img: "images/mouse11.jpg" },
+            { name: "Razer Basilisk V3", desc: "عجلة تمرير ذكية وتصميم مريح لليد الكبيرة.", price: 69, img: "images/mouse12.jpg" },
+            { name: "HP Wireless 250", desc: "ماوس لاسلكي أساسي وعملي جداً للمكاتب.", price: 15, img: "images/mouse13.jpg" },
+            { name: "Logitech Pebble M350", desc: "نحيف وصامت تماماً ومثالي للحقيبة والدراسة.", price: 29, img: "images/mouse14.jpg" }
+        ],
+        "ذاكرة": [
+            { name: "SanDisk Extreme SSD 1TB", desc: "وحدة تخزين خارجية سريعة ضد الصدمات والماء.", price: 129, img: "images/flash1.jpg" },
+            { name: "Samsung EVO Select 512GB", desc: "بطاقة ذاكرة MicroSD فائقة السرعة للكاميرات.", price: 45, img: "images/flash2.jpg" },
+            { name: "Crucial X8 2TB", desc: "هيكل ألمنيوم متين وسرعة نقل بيانات صاروخية.", price: 179, img: "images/flash3.jpg" },
+            { name: "Kingston DataTraveler 128GB", desc: "فلاش ميموري معدني صغير وعملي بمدخلين.", price: 19, img: "images/flash4.jpg" },
+            { name: "Samsung T7 Shield 4TB", desc: "مساحة تخزين ضخمة محمية بغطاء مطاطي متين.", price: 299, img: "images/flash5.jpg" },
+            { name: "WD Black P10 5TB", desc: "هارد ديسك خارجي مخصص لتخزين مكتبة الألعاب.", price: 149, img: "images/flash6.jpg" },
+            { name: "Seagate Expansion 2TB", desc: "حل تخزين خارجي بسيط وسهل للاحتفاظ بالملفات.", price: 69, img: "images/flash7.jpg" },
+            { name: "PNY Elite-X Fit 64GB", desc: "فلاش ميموري صغير جداً لا يبرز من منفذ اللابتوب.", price: 12, img: "images/flash8.jpg" },
+            { name: "Lexar Professional SD 256GB", desc: "بطاقة ذاكرة احترافية لتصوير فيديو بجودة 4K.", price: 59, img: "images/flash9.jpg" },
+            { name: "Corsair Flash Voyager 256GB", desc: "فلاش ميموري مصفح ومقاوم لأقسى الظروف.", price: 49, img: "images/flash10.jpg" },
+            { name: "Toshiba Canvio Basics 1TB", desc: "الاعتمادية اليابانية الكلاسيكية للتخزين اليومي.", price: 49, img: "images/flash11.jpg" },
+            { name: "Sabrent Rocket Nano 2TB", desc: "أصغر هارد SSD خارجي في العالم بأداء رائع.", price: 199, img: "images/flash12.jpg" },
+            { name: "Sony Tough SD 128GB", desc: "بطاقة ذواكر غير قابلة للكسر ومقاومة للماء.", price: 199, img: "images/flash13.jpg" },
+            { name: "Silicon Power 1TB SSD", desc: "هارد خارجي اقتصادي وسريع بنظام حماية داخلي.", price: 79, img: "images/flash14.jpg" }
+        ]
+    };
+
+    // دوال تفعيل النافذة المنبثقة لتكبير الصور بشكل واضح
+    function openLightbox(src) {
+        const lightbox = document.getElementById('imageLightbox');
+        const img = document.getElementById('lightboxImg');
+        img.src = src;
+        lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+        document.getElementById('imageLightbox').style.display = 'none';
+    }
+
+    // دالة البحث
+    function searchProducts() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const grid = document.getElementById('gridItems');
+        
+        if (query === "") {
+            showHome();
+            return;
+        }
+
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('productView').style.display = 'block';
+        document.getElementById('catName').innerText = `نتائج البحث عن: "${query}"`;
+        
+        document.querySelectorAll('.sidebar-menu li a').forEach(el => el.classList.remove('active'));
+        grid.innerHTML = "";
+
+        let foundCount = 0;
+
+        for (const category in storeProducts) {
+            storeProducts[category].forEach(p => {
+                if (p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query)) {
+                    foundCount++;
+                    grid.innerHTML += `
+                        <div class="item-card">
+                            <img src="${p.img}" alt="${p.name}" onclick="openLightbox(this.src)">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                            <div class="price">${p.price}$</div>
+                            <button class="btn-buy" onclick="buyItem('${p.name}', ${p.price})">طلب الشراء</button>
+                        </div>`;
+                }
+            });
+        }
+
+        if (foundCount === 0) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888; font-size: 18px; font-weight: bold;">
+                ❌ لم نجد أي نتائج تطابق بحثك، جرب كلمة أخرى!
+            </div>`;
+        }
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebarMenu');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    function updateActiveMenu(activeId) {
+        document.querySelectorAll('.sidebar-menu li a').forEach(el => el.classList.remove('active'));
+        const activeElement = document.getElementById(activeId);
+        if (activeElement) activeElement.classList.add('active');
+    }
+
+    function showHome() {
+        document.getElementById('searchInput').value = ""; 
+        document.getElementById('productView').style.display = 'none';
+        document.getElementById('mainView').style.display = 'block';
+        updateActiveMenu('menu-home');
+    }
+
+    function loadCategory(catName) {
+        document.getElementById('searchInput').value = ""; 
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('productView').style.display = 'block';
+        document.getElementById('catName').innerText = "قسم: " + catName;
+        updateActiveMenu('menu-' + catName);
+        
+        const grid = document.getElementById('gridItems');
+        grid.innerHTML = "";
+
+        const products = storeProducts[catName];
+        
+        if (products && products.length > 0) {
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <img src="${p.img}" alt="${p.name}" onclick="openLightbox(this.src)">
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <div class="price">${p.price}$</div>
+                        <button class="btn-buy" onclick="buyItem('${p.name}', ${p.price})">طلب الشراء</button>
+                    </div>`;
+            });
+        }
+    }
+
+    function handleAuth() {
+        if (!isLoggedIn) {
+            let user = prompt("الرجاء إدخال اسم المستخدم لتسجيل الدخول:");
+            if (user && user.trim() !== "") {
+                isLoggedIn = true;
+                username = user;
+                document.getElementById('loginBtn').innerText = "خروج (" + username + ")";
+                alert("أهلاً بك يا " + username + "، تم تسجيل الدخول بنجاح!");
+            }
+        } else {
+            isLoggedIn = false;
+            username = "";
+            document.getElementById('loginBtn').innerText = "تسجيل الدخول";
+            cart = [];
+            updateCartUI();
+            alert("تم تسجيل الخروج، وحذف السلة.");
+        }
+    }
+
+    function buyItem(itemName, itemPrice) {
+        if (!isLoggedIn) {
+            alert("عذراً، يجب تسجيل الدخول أولاً لتتمكن من جمع المنتجات في السلة.");
+            return;
+        }
+        cart.push({ name: itemName, price: itemPrice });
+        updateCartUI();
+        alert("تم إضافة " + itemName + " إلى السلة بنجاح.");
+    }
+
+    function updateCartUI() {
+        document.getElementById('cartCount').innerText = cart.length;
+    }
+
+    function showCart() {
+        const modal = document.getElementById('cartModal');
+        const list = document.getElementById('cartItemsList');
+        const totalEl = document.getElementById('cartTotal');
+        
+        list.innerHTML = "";
+        let total = 0;
+
+        if (cart.length === 0) {
+            list.innerHTML = "<p style='text-align:center;'>السلة فارغة حالياً. ابدأ بالتسوق الآن!</p>";
+        } else {
+            cart.forEach((item, index) => {
+                total += item.price;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span style="font-weight:bold; color:#ff4081;">${item.price}$</span>
+                    </div>`;
+            });
+        }
+        
+        totalEl.innerText = "الإجمالي: " + total + "$";
+        modal.style.display = "flex";
+    }
+
+    function closeCart() {
+        document.getElementById('cartModal').style.display = "none";
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert("السلة فارغة، أضف بعض المنتجات أولاً!");
+            return;
+        }
+        alert("شكراً لك يا " + username + "! تم استلام طلبك بنجاح وجاري تجهيز المنتجات شحنها إليك.");
+        cart = [];
+        updateCartUI();
+        closeCart();
+    }
+</script>
+
+</body>
+</html>
+<!-- الواجهة الرئيسية التي تظهر عند فتح الموقع -->
+<div id="mainView">
+    <nav class="sidebar">
+        <!-- روابط الأقسام التي تربط السكربت -->
+        <a onclick="loadCategory('تابلت')">الأجهزة اللوحية</a>
+        <a onclick="loadCategory('ساعات')">الساعات الذكية</a>
+    </nav>
+    
+    <div class="content">
+        <h1>أهلاً بك في متجر Mega Tech</h1>
+        <!-- باقي محتويات واجهتك الرئيسية هنا -->
+    </div>
+</div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متجر Mega Tech</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; color: #333; margin: 0; }
+        .store-container { padding: 40px 20px; }
+        
+        /* حاوية الفيديو مع طبقة حماية لمنع الضغط عليه */
+        .video-wrapper { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto 40px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+        }
+        /* هذه الطبقة الشفافة تمنع الضغط على اليوتيوب */
+        .video-overlay { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 10; 
+        }
+        .video-wrapper iframe { width: 100%; aspect-ratio: 16/9; display: block; }
+
+        .sidebar { position: fixed; right: -250px; top: 0; width: 250px; height: 100%; background: #e0e0e0; z-index: 1000; transition: 0.3s; padding-top: 60px; border-left: 1px solid #ccc; }
+        .sidebar.active { right: 0; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; }
+        .overlay.active { display: block; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .item-card { background: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 20px; text-align: center; }
+        .item-card img { width: 100%; height: 200px; object-fit: contain; cursor: pointer; border-radius: 10px; }
+        
+        .neon-btn { background: transparent; border: 1px solid #333; color: #333; padding: 10px 25px; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .neon-btn:hover { background: #333; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div id="mainView">
+    <nav class="sidebar" id="sidebarMenu">
+        <ul style="list-style: none; padding: 0;">
+            <li><a style="padding: 15px; display: block; color: #333; cursor: pointer;" onclick="showHome()">الرئيسية</a></li>
+            <li><a style="padding: 15px; display: block; color: #333; cursor: pointer;" onclick="loadCategory('أجهزة')">الأجهزة</a></li>
+        </ul>
+    </nav>
+    <div id="sidebarOverlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="store-container">
+        <div class="video-wrapper">
+            <div class="video-overlay"></div> 
+            <iframe src="https://www.youtube.com/embed/gUZR1XHPNRo?autoplay=1&mute=1&loop=1&playlist=gUZR1XHPNRo&controls=0&modestbranding=1&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+
+        <button class="neon-btn" onclick="toggleSidebar()">القائمة</button>
+        <button id="loginBtn" class="neon-btn" onclick="handleAuth()">تسجيل الدخول</button>
+        <button class="neon-btn" onclick="showCart()">السلة (<span id="cartCount">0</span>)</button>
+        
+        <h1 style="text-align: center; color: #333;">متجر Mega Tech</h1>
+        <div id="productView" style="display: none;">
+            <h2 id="catName" style="color:#333; text-align: center;"></h2>
+            <div class="product-grid" id="gridItems"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+   <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متجر Mega Tech</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; color: #333; margin: 0; }
+        .store-container { padding: 40px 20px; }
+        
+        /* حاوية الفيديو */
+        .video-wrapper { 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto 40px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+        }
+        .video-wrapper iframe { width: 100%; aspect-ratio: 16/9; display: block; }
+
+        .sidebar { position: fixed; right: -250px; top: 0; width: 250px; height: 100%; background: #e0e0e0; z-index: 1000; transition: 0.3s; padding-top: 60px; border-left: 1px solid #ccc; }
+        .sidebar.active { right: 0; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; }
+        .overlay.active { display: block; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .item-card { background: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 20px; text-align: center; }
+        .item-card img { width: 100%; height: 200px; object-fit: contain; cursor: pointer; border-radius: 10px; }
+        
+        .neon-btn { background: transparent; border: 1px solid #333; color: #333; padding: 10px 25px; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .neon-btn:hover { background: #333; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div id="mainView">
+    <nav class="sidebar" id="sidebarMenu">
+        <ul style="list-style: none; padding: 0;">
+            <li><a style="padding: 15px; display: block; color: #333; cursor: pointer;" onclick="showHome()">الرئيسية</a></li>
+            <li><a style="padding: 15px; display: block; color: #333; cursor: pointer;" onclick="loadCategory('أجهزة')">الأجهزة</a></li>
+        </ul>
+    </nav>
+    <div id="sidebarOverlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="store-container">
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/gUZR1XHPNRo" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <button class="neon-btn" onclick="toggleSidebar()">القائمة</button>
+        <button id="loginBtn" class="neon-btn" onclick="handleAuth()">تسجيل الدخول</button>
+        <button class="neon-btn" onclick="showCart()">السلة (<span id="cartCount">0</span>)</button>
+        
+        <h1 style="text-align: center; color: #333;">متجر Mega Tech</h1>
+        <div id="productView" style="display: none;">
+            <h2 id="catName" style="color:#333; text-align: center;"></h2>
+            <div class="product-grid" id="gridItems"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isLoggedIn = false;
+    let username = "";
+    let cart = [];
+
+    const storeProducts = {
+        "أجهزة": Array.from({length: 14}, (_, i) => ({name: "منتج "+(i+1), desc: "وصف المنتج", price: 5000, img: "mouse (2).jpg"}))
+    };
+
+    function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+    function handleAuth() {
+        if (!isLoggedIn) {
+            let user = prompt("الرجاء إدخال اسم المستخدم:");
+            if (user) { isLoggedIn = true; username = user; document.getElementById('loginBtn').innerText = "خروج (" + username + ")"; }
+        } else {
+            isLoggedIn = false; username = ""; document.getElementById('loginBtn').innerText = "تسجيل الدخول"; cart = []; updateCartUI();
+        }
+    }
+    function updateCartUI() { document.getElementById('cartCount').innerText = cart.length; }
+    function loadCategory(catName) {
+        document.getElementById('productView').style.display = 'block';
+        document.getElementById('catName').innerText = "قسم: " + catName;
+        const grid = document.getElementById('gridItems'); grid.innerHTML = "";
+        storeProducts[catName].forEach(p => {
+            grid.innerHTML += `<div class="item-card"><img src="${p.img}"><h3>${p.name}</h3><p>${p.price}$</p><button class="neon-btn" onclick="alert('تم الطلب')">طلب</button></div>`;
+        });
+    }
+    function showHome() { document.getElementById('productView').style.display = 'none'; }
+    function showCart() { alert("السلة تحتوي على " + cart.length + " منتجات"); }
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متجر Mega Tech</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff0f5; color: #4a4a4a; margin: 0; line-height: 1.6; }
+        .store-container { padding: 40px 20px; max-width: 900px; margin: auto; }
+        
+        /* تصميم المستطيلات الاحترافية */
+        .info-box { background: #ffffff; border: 2px solid #ffb6c1; padding: 25px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3); }
+        h2 { color: #ff69b4; border-bottom: 2px solid #ffb6c1; display: inline-block; margin-bottom: 15px; }
+
+        .btn-pink { background: #ffb6c1; border: none; color: white; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; text-decoration: none; display: inline-block; }
+        .btn-pink:hover { background: #ff69b4; }
+    </style>
+</head>
+<body>
+
+<div class="store-container">
+    <h1 style="text-align: center; color: #ff69b4;">Mega Tech</h1>
+
+    <!-- نبذة وفكرة المتجر -->
+    <div class="info-box">
+        <h2>عن متجرنا</h2>
+        <p>نحن في <strong>Mega Tech</strong> متخصصون في توفير أفضل الحلول التقنية والأجهزة الذكية التي تجعل حياتك أسهل وأكثر كفاءة.</p>
+        
+        <h2>فكرة المتجر</h2>
+        <p>تتمحور فكرتنا حول تقريب المسافات بينك وبين أحدث التقنيات العالمية، من خلال متجر يوفر الجودة، السعر المناسب، ودعم فني متميز يواكب احتياجاتك.</p>
+    </div>
+
+    <!-- قسم التواصل الاحترافي -->
+    <div class="info-box" style="text-align: center;">
+        <h2>تواصل معنا</h2>
+        <p>يسعدنا خدمتك والرد على استفساراتك مباشرة:</p>
+        <div style="margin-top: 20px;">
+            <a href="https://wa.me/967737232799" class="btn-pink">واتساب 💬</a>
+            <a href="mailto:your-email@example.com" class="btn-pink">مراسلة عبر البريد 📧</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

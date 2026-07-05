@@ -1,0 +1,17 @@
+.product-card {
+    border: 2px solid #d63384; /* الوردي الداكن */
+    border-radius: 15px;
+    padding: 15px;
+    background: #fff;
+    transition: 0.3s;
+}
+
+.btn-buy {
+    background-color: #d63384; /* الوردي الداكن */
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+}

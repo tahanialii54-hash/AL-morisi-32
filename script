@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Tech Store | متجر ميجا تك</title>
+    <style>
+        :root { --primary-pink: #f48fb1; --light-pink: #fce4ec; --dark-gray: #424242; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #ffffff; }
+        .top-marquee { background: var(--primary-pink); color: white; padding: 8px 0; text-align: center; font-weight: bold; }
+        .utility-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 20px; }
+        .item-card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #fce4ec; text-align: center; }
+        .item-card img { width: 100%; height: 160px; object-fit: contain; cursor: pointer; }
+        .price { color: #ff4081; font-weight: bold; font-size: 20px; margin: 10px 0; }
+        .btn-buy { background: #ff4081; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+        .image-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+        .image-lightbox img { max-width: 90%; max-height: 80vh; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<marquee class="top-marquee">أهلاً بك في متجر Mega Tech - أحدث الأجهزة التقنية!</marquee>
+
+<div class="utility-bar">
+    <div style="font-weight: bold; font-size: 20px; color: #ff4081; cursor: pointer;" onclick="location.reload()">Mega Tech 🛍️</div>
+    <button onclick="loadWatches()">عرض الساعات الذكية</button>
+</div>
+
+<div id="mainContent" class="products-grid">
+    </div>
+
+<div id="lightbox" class="image-lightbox" onclick="this.style.display='none'">
+    <img id="lightboxImg" src="">
+</div>
+
+<script>
+const watchProducts = [
+    { name: "ساعة RedSport", price: "150 SAR", img: "images/watch1.jpg", desc: "سوار رياضي خفيف" },
+    { name: "ساعة Riversong Pro", price: "320 SAR", img: "images/watch2.jpg", desc: "شاشة دائرية متطورة" },
+    { name: "ساعة Steel Elite", price: "450 SAR", img: "images/watch3.jpg", desc: "تصميم معدني فاخر" },
+    { name: "ساعة Square Watch", price: "280 SAR", img: "images/watch4.jpg", desc: "شاشة مربعة عصرية" },
+    { name: "ساعة Earbud Combo", price: "399 SAR", img: "images/watch5.jpg", desc: "سماعات مدمجة" },
+    { name: "ساعة 4G Ultra", price: "899 SAR", img: "images/watch6.jpg", desc: "دعم شريحة SIM" },
+    { name: "ساعة TWS Hybrid", price: "750 SAR", img: "images/watch7.jpg", desc: "هجين ذكي" },
+    { name: "ساعة AMOLED", price: "599 SAR", img: "images/watch8.jpg", desc: "دقة عالية" },
+    { name: "ساعة Core Basic", price: "350 SAR", img: "images/watch9.jpg", desc: "تتبع لياقة" },
+    { name: "ساعة Apple Style", price: "299 SAR", img: "images/watch10.jpg", desc: "تصميم أنيق" },
+    { name: "ساعة Lige Luxury", price: "950 SAR", img: "images/watch11.jpg", desc: "فخامة مطلقة" },
+    { name: "ساعة Flash Outdoor", price: "680 SAR", img: "images/watch12.jpg", desc: "مصباح مدمج" },
+    { name: "ساعة Ladies Glamour", price: "499 SAR", img: "images/watch13.jpg", desc: "تصميم نسائي" },
+    { name: "ساعة Smart V1", price: "410 SAR", img: "images/watch14.jpg", desc: "شاشة مستطيلة" },
+    { name: "ساعة Classic Tech", price: "380 SAR", img: "images/watch15.jpg", desc: "تقنية كلاسيكية" }
+];
+
+function loadWatches() {
+    const container = document.getElementById('mainContent');
+    container.innerHTML = "";
+    watchProducts.forEach(p => {
+        container.innerHTML += `
+            <div class="item-card">
+                <img src="${p.img}" onclick="openImg('${p.img}')" onerror="this.src='https://via.placeholder.com/150'">
+                <h3>${p.name}</h3>
+                <p>${p.desc}</p>
+                <div class="price">${p.price}</div>
+                <button class="btn-buy" onclick="alert('تم الطلب!')">شراء الآن</button>
+            </div>
+        `;
+    });
+}
+
+function openImg(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').style.display = 'flex';
+}
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 15px; padding: 15px; text-align: center; border: 1px solid #ddd; transition: 0.3s; }
+        .card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 180px; object-fit: contain; cursor: pointer; }
+        .price { color: #ff4081; font-weight: bold; font-size: 1.2em; margin: 10px 0; }
+        .btn-buy { background: #ff4081; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+        
+        /* Lightbox - نافذة التكبير */
+        #lightbox { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        #lightbox img { max-width: 90%; max-height: 85vh; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">قسم الأجهزة اللوحية (Tablets)</h2>
+    <div class="grid" id="tabletGrid"></div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightboxImg" src="">
+    </div>
+
+    <script>
+        // بيانات جميع الأقسام (ضعها في بداية ملف JS)
+const storeProducts = {
+    "الماوس": [
+        {name: "Cyber Neon", img: "mouse (2).jpg", price: "9,000"},
+        {name: "Meetion Pro", img: "mouse (4).jpg", price: "11,000"},
+        {name: "Elite Stealth", img: "mouse (5).jpg", price: "8,500"},
+        {name: "Dragon RGB", img: "mouse (6).jpg", price: "10,500"},
+        {name: "Bunny Wireless", img: "mouse (8).jpg", price: "7,000"},
+        {name: "HP Classic", img: "mouse (12).jpg", price: "5,500"},
+        {name: "Swift 2.4G", img: "mouse (14).jpg", price: "9,500"},
+        {name: "Inphic F8", img: "mouse (16).jpg", price: "12,000"},
+        {name: "Ugreen Silent", img: "mouse (17).jpg", price: "10,000"},
+        {name: "Pink Gamer", img: "mouse (22).jpg", price: "11,500"},
+        {name: "Razeak Eagle", img: "mouse (24).jpg", price: "13,000"},
+        {name: "Honeycomb Pro", img: "mouse (27).jpg", price: "14,500"},
+        {name: "iMICE Wireless", img: "mouse (28).jpg", price: "9,000"},
+        {name: "Logi Pink", img: "mouse (30).jpg", price: "16,000"}
+    ],
+    "الكاميرات": [], "التابات": [], "الطابعات": [], "السماعات": [], "الفلاشات": []
+};
+
+// الدالة المسؤولة عن تحديث واجهتك الموجودة مسبقاً
+function loadCategory(catName) {
+    const grid = document.getElementById('gridItems'); // تأكد أن هذا الـ ID هو الموجود في واجهتك
+    grid.innerHTML = ""; // مسح المنتجات السابقة
+    
+    const products = storeProducts[catName];
+    
+    if (products && products.length > 0) {
+        products.forEach(p => {
+            grid.innerHTML += `
+                <div class="product-card">
+                    <img src="${p.img}" alt="${p.name}">
+                    <h3>${p.name}</h3>
+                    <p class="price">${p.price} YER</p>
+                    <button class="btn-buy" onclick="buyItem('${p.name}', ${p.price.replace(',', '')})">طلب الشراء</button>
+                </div>`;
+        });
+    } else {
+        grid.innerHTML = "<h2 style='text-align:center;'>القسم فارغ حالياً</h2>";
+    }
+}
+// 1. قاعدة بيانات الماوس فقط
+const mouseProducts = [
+    {name: "Cyber Neon", img: "mouse (2).jpg", price: "9,000"},
+    {name: "Meetion Pro", img: "mouse (4).jpg", price: "11,000"},
+    {name: "Elite Stealth", img: "mouse (5).jpg", price: "8,500"},
+    {name: "Dragon RGB", img: "mouse (6).jpg", price: "10,500"},
+    {name: "Bunny Wireless", img: "mouse (8).jpg", price: "7,000"},
+    {name: "HP Classic", img: "mouse (12).jpg", price: "5,500"},
+    {name: "Swift 2.4G", img: "mouse (14).jpg", price: "9,500"},
+    {name: "Inphic F8", img: "mouse (16).jpg", price: "12,000"},
+    {name: "Ugreen Silent", img: "mouse (17).jpg", price: "10,000"},
+    {name: "Pink Gamer", img: "mouse (22).jpg", price: "11,500"},
+    {name: "Razeak Eagle", img: "mouse (24).jpg", price: "13,000"},
+    {name: "Honeycomb Pro", img: "mouse (27).jpg", price: "14,500"},
+    {name: "iMICE Wireless", img: "mouse (28).jpg", price: "9,000"},
+    {name: "Logi Pink", img: "mouse (30).jpg", price: "16,000"}
+];
+
+// 2. دالة عرض الماوسات عند النقر
+function showMouseCategory() {
+    const grid = document.getElementById('gridItems'); // تأكد أن هذا الـ ID هو في HTML
+    grid.innerHTML = ""; // مسح أي محتوى سابق لضمان عدم تداخل الأقسام
+    
+    // إضافة عنوان للقسم
+    grid.innerHTML += `<h2 style="grid-column: 1/-1; text-align:center; color:#d63384;">قسم الماوسات الاحترافية</h2>`;
+    
+    // عرض المنتجات
+    mouseProducts.forEach(p => {
+        grid.innerHTML += `
+            <div class="product-card">
+                <img src="${p.img}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p style="color:#d63384; font-weight:bold;">${p.price} YER</p>
+                <button class="btn-buy" onclick="alert('تمت إضافة ${p.name} للسلة')">طلب الشراء</button>
+            </div>`;
+    });
+}
+<script>
+    // 1. تعريف المتغيرات الأساسية
+    let isLoggedIn = false;
+    let username = "";
+    let cart = [];
+
+    // 2. قاعدة بيانات المنتجات
+    const storeProducts = {
+        "أجهزة": Array.from({length: 14}, (_, i) => ({
+            name: "منتج " + (i + 1),
+            desc: "وصف المنتج الاحترافي رقم " + (i + 1),
+            price: 5000 + (i * 100),
+            img: "mouse (2).jpg"
+        }))
+    };
+
+    // 3. الدوال البرمجية (تم تصحيحها)
+    function toggleSidebar() { 
+        document.getElementById('sidebarMenu').classList.toggle('active'); 
+        document.getElementById('sidebarOverlay').classList.toggle('active'); 
+    }
+
+    function handleAuth() {
+        if (!isLoggedIn) {
+            let user = prompt("الرجاء إدخال اسم المستخدم:");
+            if (user && user.trim() !== "") { 
+                isLoggedIn = true; 
+                username = user; 
+                document.getElementById('loginBtn').innerText = "خروج (" + username + ")"; 
+            }
+        } else {
+            isLoggedIn = false; 
+            username = ""; 
+            document.getElementById('loginBtn').innerText = "تسجيل الدخول"; 
+            cart = []; 
+            updateCartUI();
+        }
+    }
+
+    function updateCartUI() { 
+        document.getElementById('cartCount').innerText = cart.length; 
+    }
+
+    function loadCategory(catName) {
+        document.getElementById('productView').style.display = 'block';
+        document.getElementById('catName').innerText = "قسم: " + catName;
+        const grid = document.getElementById('gridItems'); 
+        grid.innerHTML = "";
+        
+        storeProducts[catName].forEach(p => {
+            grid.innerHTML += `
+                <div class="item-card">
+                    <img src="${p.img}">
+                    <h3>${p.name}</h3>
+                    <p>${p.price}$</p>
+                    <button class="neon-btn" onclick="alert('تم إضافة ${p.name} للسلة')">طلب</button>
+                </div>`;
+        });
+    }
+
+    function showHome() { document.getElementById('productView').style.display = 'none'; }
+    function showCart() { alert("السلة تحتوي على " + cart.length + " منتجات"); }
+</script>
