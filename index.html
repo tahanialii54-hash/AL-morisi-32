@@ -594,38 +594,9 @@
     </div>
 </div>
 
-<script>
-   <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>متجر Mega Tech</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; color: #333; margin: 0; }
-        .store-container { padding: 40px 20px; }
+<style>
+   
         
-        /* حاوية الفيديو */
-        .video-wrapper { 
-            width: 100%; 
-            max-width: 800px; 
-            margin: 0 auto 40px; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-        }
-        .video-wrapper iframe { width: 100%; aspect-ratio: 16/9; display: block; }
-
-        .sidebar { position: fixed; right: -250px; top: 0; width: 250px; height: 100%; background: #e0e0e0; z-index: 1000; transition: 0.3s; padding-top: 60px; border-left: 1px solid #ccc; }
-        .sidebar.active { right: 0; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 999; }
-        .overlay.active { display: block; }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .item-card { background: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 20px; text-align: center; }
-        .item-card img { width: 100%; height: 200px; object-fit: contain; cursor: pointer; border-radius: 10px; }
-        
-        .neon-btn { background: transparent; border: 1px solid #333; color: #333; padding: 10px 25px; border-radius: 50px; cursor: pointer; transition: 0.3s; }
-        .neon-btn:hover { background: #333; color: #fff; }
     </style>
 </head>
 <body>
@@ -656,35 +627,8 @@
     </div>
 </div>
 
-<script>
-    let isLoggedIn = false;
-    let username = "";
-    let cart = [];
 
-    const storeProducts = {
-        "أجهزة": Array.from({length: 14}, (_, i) => ({name: "منتج "+(i+1), desc: "وصف المنتج", price: 5000, img: "mouse (2).jpg"}))
-    };
-
-    function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
-    function handleAuth() {
-        if (!isLoggedIn) {
-            let user = prompt("الرجاء إدخال اسم المستخدم:");
-            if (user) { isLoggedIn = true; username = user; document.getElementById('loginBtn').innerText = "خروج (" + username + ")"; }
-        } else {
-            isLoggedIn = false; username = ""; document.getElementById('loginBtn').innerText = "تسجيل الدخول"; cart = []; updateCartUI();
-        }
-    }
-    function updateCartUI() { document.getElementById('cartCount').innerText = cart.length; }
-    function loadCategory(catName) {
-        document.getElementById('productView').style.display = 'block';
-        document.getElementById('catName').innerText = "قسم: " + catName;
-        const grid = document.getElementById('gridItems'); grid.innerHTML = "";
-        storeProducts[catName].forEach(p => {
-            grid.innerHTML += `<div class="item-card"><img src="${p.img}"><h3>${p.name}</h3><p>${p.price}$</p><button class="neon-btn" onclick="alert('تم الطلب')">طلب</button></div>`;
-        });
-    }
-    function showHome() { document.getElementById('productView').style.display = 'none'; }
-    function showCart() { alert("السلة تحتوي على " + cart.length + " منتجات"); }
+ 
 </script>
 </body>
 </html>
